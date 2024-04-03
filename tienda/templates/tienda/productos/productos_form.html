@@ -1,0 +1,31 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block titulo %}Crear Productos{% endblock %}
+
+{% block contenedor %}
+
+    <h1 class="titul">Crear Producto</h1>
+    <form action="{% url 'productos_crear' %}" method="post">
+        {% csrf_token %}
+        <label class="form-control">Nombre</label>
+        <input class="form-control" type="text" name="nombre" /><br>
+        <label class="form-control">Precio</label>
+        <input class="form-control" type="number" name="precio" /><br>
+        <label class="form-control">Inventario</label>
+        <input class="form-control" type="number" name="inventario" /><br>
+        <label class="form-control">Fecha de Creación</label>
+        <input class="form-control" type="date" name="fecha_creacion" /><br>
+
+        <label class="form-control">Categoría</label>
+        <select class="form-control" name="categoria">
+            <option value="">Seleccione</option>
+            {% for c in data %}
+                <option value="{{ c.id }}">{{ c.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+
+{% endblock %}

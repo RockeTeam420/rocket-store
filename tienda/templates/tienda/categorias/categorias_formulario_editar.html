@@ -1,0 +1,19 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block titulo %}Actualizar Categoría{% endblock %}
+
+{% block contenedor %}
+
+    <h1 class="titul">Actualizar Categoría ({{ data.id }})</h1>
+    <form action="{% url 'categorias_actualizar' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ data.id }}">
+        <label class="form-control">Nombre</label>
+        <input class="form-control" type="text" name="nombre" value="{{ data.nombre }}" /><br>
+        <label class="form-control">Descripción</label>
+        <input class="form-control" type="text" name="descripcion" value="{{ data.descripcion }}" /><br>
+        <button type="submit" class="btn btn-success">Actualizar</button>
+    </form>
+
+{% endblock %}

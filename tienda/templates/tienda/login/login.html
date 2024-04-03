@@ -1,0 +1,38 @@
+{% extends 'tienda/base2.html' %}
+{% load static %}
+
+{% block titulo %}Login{% endblock %}
+
+{% block contenedor %}
+<div class="bg mt-5 w-100 h-100 ml-0 mr-0 mx-auto text-center">
+    <div class="card w-25 m-auto mt-auto mb-auto h-100">
+        <div class="card-header text-center">
+            Tienda virtual Sena
+        </div>
+        <form action="{% url 'login' %}" method="post" class="m-3 text-center">
+            {% csrf_token %}
+            <input class="form-control" type="text" name="correo" placeholder="Usuario"><br>
+            <input class="form-control" type="password" name="clave" placeholder="Contraseña"><br>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!--<div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{ p.foto.url }}" class="card-img-top" alt="{{ p.nombre }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.nombre }}</h5>
+                        <p class="card-text">
+                            Precio: {{ p.precio }}<br>
+                            Existencias: {{ p.inventario }}<br>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">{{ p.categoria }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>-->

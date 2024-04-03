@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculadora</title>
+</head>
+<body>
+    <form action="{% url 'calc' %}" method="post">
+        {% csrf_token %}
+        <label>Num1:</label>
+        <input type="number" name="num1"/><br/>
+        <label>Num2:</label>
+        <input type="number" name="num2"/><br/>
+        <label>Operación:</label>
+        <select name="oper">
+            <option value="">Seleccione</option>
+            <option value="1">Suma</option>
+            <option value="2">Resta</option>
+            <option value="3">Multiplicación</option>
+            <option value="4">División</option>
+        </select>
+        <br/>
+        <button type="submit">Calcular</button>
+    </form>
+</body>
+</html>

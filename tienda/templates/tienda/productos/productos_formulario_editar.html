@@ -1,0 +1,32 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block titulo %}Actualizar Producto{% endblock %}
+
+{% block contenedor %}
+
+    <h1 class="titul">Actualizar Producto ({{ data.id }})</h1>
+    <form action="{% url 'productos_actualizar' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ data.id }}">
+        <label class="form-control">Nombre</label>
+        <input class="form-control" type="text" name="nombre" value="{{ data.nombre }}" /><br>
+        <label class="form-control">Precio</label>
+        <input class="form-control" type="number" name="precio" value="{{ data.precio }}" /><br>
+        <label class="form-control">Inventario</label>
+        <input class="form-control" type="number" name="inventario" value="{{ data.inventario }}" /><br>
+        <label class="form-control">Fecha de Creación</label>
+        <input class="form-control" type="date" name="fecha_creacion" value="{{ data.fecha_creacion|date:'Y-m-d' }}" /><br>
+
+        <label class="form-control">Categoría</label>
+        <select class="form-control" name="categoria">
+            <option value="">Seleccione</option>
+            {% for c in categoria %}
+                <option value="{{ c.id }}" {% if data.categoria.id == c.id %}selected{% endif %}>{{ c.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-success">Actualizar</button>
+    </form>
+
+{% endblock %}

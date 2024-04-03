@@ -1,0 +1,44 @@
+{% extends 'tienda/base.html' %}
+{% load static %}
+
+{% block titulo %}Categorías{% endblock %}
+
+{% block contenedor %}
+
+    <h1>Categorías</h1>
+    <a class="btn btn-success" href="{% url 'categorias_form' %}">Agregar</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Operaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in data %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.nombre }}</td>
+                    <td>{{ r.descripcion }}</td>
+                    <td>
+                        <a class="btn btn-danger" href="javascript:eliminar('{% url 'categorias_eliminar' r.id %}')">Eliminar</a>
+                        <a class="btn btn-info" href="{% url 'categorias_formulario_editar' r.id %}">Editar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}
