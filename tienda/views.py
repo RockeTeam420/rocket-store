@@ -63,17 +63,17 @@ def inicio(request):
 	logueo = request.session.get("logueo", False)
 
 	if logueo:
-		categorias = Categoria.objects.all()
+		categorias = CategoriaEtiqueta.objects.all()
 
 		cat = request.GET.get("cat")
 		if cat == None:
 			productos = Producto.objects.all()
 		else:
-			c = Categoria.objects.get(pk=cat)
+			c = CategoriaEtiqueta.objects.get(pk=cat)
 			productos = Producto.objects.filter(categoria=c)
 
 		contexto = {"data": productos, "cat": categorias}
-		return render(request, "tienda/inicio.html", contexto)
+		return render(request, "tienda/inicio/inicio.html", contexto)
 	else:
 		return redirect("index")
 
@@ -83,7 +83,7 @@ from .decorador_especial import *
 
 @login_requerido
 def categorias(request):
-	q = Categoria.objects.all()
+	q = CategoriaEtiqueta.objects.all()
 	contexto = {"data": q}
 	return render(request, "tienda/categorias/categorias.html", contexto)
 
@@ -96,11 +96,9 @@ def categorias_form(request):
 def categorias_crear(request):
 	if request.method == "POST":
 		nomb = request.POST.get("nombre")
-		desc = request.POST.get("descripcion")
 		try:
-			q = Categoria(
+			q = CategoriaEtiqueta(
 				nombre=nomb,
-				descripcion=desc
 			)
 			q.save()
 			messages.success(request, "Guardado correctamente!!")
@@ -475,3 +473,28 @@ def prueba_correo(request):
 		return HttpResponse("Encabezado no válido")
 	except Exception as e:
 		return HttpResponse(f"Error: {e}")
+	
+
+def etiquetas_listar(request):
+	q = SubCategoriaEtiqueta.objects.all()
+	contexto = {"data": q}
+	return render(request, "tienda/categorias/subcategoria/etiquetas.html", contexto)
+
+def etiquetas_crear(request):
+	if request.method == "POST":
+		nomb = request.POST.get("nombre")
+		cat = request.POST.get("CategoriaEtiqueta")
+		try:
+			q = SubCategoriaEtiqueta(
+				nombre=nomb,
+				CategoriaEtiqueta=cat
+			)
+			q.save()
+			messages.success(request, "Guardado correctamente!!")
+		except Exception as e:
+			messages.error(request, f"Error: {e}")
+		return redirect("etiquetas_listar")
+
+	else:
+		messages.warning(request, "Error: No se enviaron datos...")
+		return redirect("etiquetas_listar")
