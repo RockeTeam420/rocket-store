@@ -5,7 +5,7 @@
 
 {% block contenedor %}
 
-    <h1 class="titul">Actualizar Categoría ({{ data.id }})</h1>
+    <h1 class="titul">Actualizar Categoría ({{ data.nombre }})</h1>
     <form action="{% url 'categorias_actualizar' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="id" value="{{ data.id }}">

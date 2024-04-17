@@ -27,7 +27,7 @@ class CategoriaEtiqueta(models.Model):
 		return self.nombre
 
 class SubCategoriaEtiqueta(models.Model):
-	nombre = models.CharField(max_length=254, unique=True)
+	nombre = models.CharField(max_length=254)
 	id_categoria_etiqueta = models.ForeignKey(CategoriaEtiqueta, on_delete=models.DO_NOTHING)
 
 	def __str__(self):

@@ -6,12 +6,13 @@
 {% block contenedor %}
 
     <h1>Etiquetas</h1>
-    <a class="btn btn-success" href="{% url 'categorias_form' %}">Agregar</a>
+    <a class="btn btn-success" href="{% url 'etiquetas_form' %}">Agregar</a>
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Categoria</th>
                 <th>Operaciones</th>
             </tr>
         </thead>
@@ -20,9 +21,10 @@
                 <tr>
                     <td>{{ r.id }}</td>
                     <td>{{ r.nombre }}</td>
+                    <td>{{ r.id_categoria_etiqueta }}</td>
                     <td>
-                        <a class="btn btn-danger" href="javascript:eliminar('{% url 'categorias_eliminar' r.id %}')">Eliminar</a>
-                        <a class="btn btn-info" href="{% url 'categorias_formulario_editar' r.id %}">Editar</a>
+                        <a class="btn btn-danger" href="javascript:eliminar('{% url 'etiquetas_eliminar' r.id %}')">Eliminar</a>
+                        <a class="btn btn-info" href="{% url 'etiquetas_form_editar' r.id %}">Editar</a>
                     </td>
                 </tr>
             {% endfor %}
