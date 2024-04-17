@@ -20,6 +20,26 @@ class Producto(models.Model):
 	def __str__(self):
 		return self.nombre
 
+class CategoriaEtiqueta(models.Model):
+	nombre = models.CharField(max_length=254, unique=True)
+
+	def __str__(self):
+		return self.nombre
+
+class SubCategoriaEtiqueta(models.Model):
+	nombre = models.CharField(max_length=254)
+	id_categoria_etiqueta = models.ForeignKey(CategoriaEtiqueta, on_delete=models.DO_NOTHING)
+
+	def __str__(self):
+		return self.nombre
+
+class ProductoSubCategoria(models.Model):
+	id_producto = models.ForeignKey(Producto, on_delete=models.DO_NOTHING)
+	id_sub_categoria_etiqueta = models.ForeignKey(SubCategoriaEtiqueta, on_delete=models.DO_NOTHING)
+
+	def __str__(self):
+		return self.id_producto
+	
 
 class Usuario(models.Model):
 	nombre = models.CharField(max_length=254)

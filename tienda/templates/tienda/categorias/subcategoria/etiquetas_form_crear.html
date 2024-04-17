@@ -1,0 +1,23 @@
+{% extends 'tienda/inicio/base.html' %}
+{% load static %}
+
+{% block titulo %}Crear Etiqueta{% endblock %}
+
+{% block contenedor %}
+    <!--{{ data.categoriaetiqueta }}-->
+    <h1 class="titul">Crear Etiqueta {{ data.id }}</h1>
+    <form action="{% url 'etiquetas_crear' %}" method="post">
+        {% csrf_token %}
+        <label class="form-control">Nombre etiqueta</label>
+        <input class="form-control" type="text" name="nombre" /><br>
+        <label class="form-control">Categoria etiqueta</label>
+        <select class="form-control" name="categoriaEtiqueta">
+            {% for i in data %}
+                <option value="{{ i.id }}">{{ i.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" class="btn btn-success">Crear</button>
+    </form>
+
+{% endblock %}

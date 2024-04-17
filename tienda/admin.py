@@ -43,3 +43,22 @@ class DetalleVentaAdmin(admin.ModelAdmin):
 @admin.register(Venta)
 class VentaAdmin(admin.ModelAdmin):
 	list_display = ['id', 'fecha_venta', 'usuario']
+
+
+@admin.register(CategoriaEtiqueta)
+class CategoriaEtiquetaAdmin(admin.ModelAdmin):
+	list_display = ['id', 'nombre']
+
+
+@admin.register(SubCategoriaEtiqueta)
+class SubCategoriaEtiquetaAdmin(admin.ModelAdmin):
+	list_display = ['id', 'nombre', 'id_categoria_etiqueta']
+
+
+@admin.register(ProductoSubCategoria)
+class ProductoSubCategoriaAdmin(admin.ModelAdmin):
+	list_display = ['id', 'id_producto', 'id_sub_categoria_etiqueta']
+
+
+
+

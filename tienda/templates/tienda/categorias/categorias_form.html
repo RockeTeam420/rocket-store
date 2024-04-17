@@ -1,4 +1,4 @@
-{% extends 'tienda/base.html' %}
+{% extends 'tienda/inicio/base.html' %}
 {% load static %}
 
 {% block titulo %}Crear Categorías{% endblock %}
@@ -10,8 +10,6 @@
         {% csrf_token %}
         <label class="form-control">Nombre</label>
         <input class="form-control" type="text" name="nombre" /><br>
-        <label class="form-control">Descripción</label>
-        <input class="form-control" type="text" name="descripcion" /><br>
         <button type="submit" class="btn btn-success">Guardar</button>
     </form>
 

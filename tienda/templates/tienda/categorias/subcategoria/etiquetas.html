@@ -1,22 +1,18 @@
 {% extends 'tienda/inicio/base.html' %}
 {% load static %}
-{% load humanize %}
 
-{% block titulo %}Productos{% endblock %}
+{% block titulo %}Etiquetas{% endblock %}
 
 {% block contenedor %}
 
-    <h1>Productos</h1>
-    <a class="btn btn-success" href="{% url 'productos_form' %}">Agregar</a>
+    <h1>Etiquetas</h1>
+    <a class="btn btn-success" href="{% url 'etiquetas_form' %}">Agregar</a>
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Precio</th>
-                <th>Inventario</th>
-                <th>Fecha de Creación</th>
-                <th>Categoría</th>
+                <th>Categoria</th>
                 <th>Operaciones</th>
             </tr>
         </thead>
@@ -25,13 +21,10 @@
                 <tr>
                     <td>{{ r.id }}</td>
                     <td>{{ r.nombre }}</td>
-                    <td class="text-end">${{ r.precio|floatformat:0|intcomma }}</td>
-                    <td>{{ r.inventario }}</td>
-                    <td>{{ r.fecha_creacion }}</td>
-                    <td>{{ r.categoria }}</td>
+                    <td>{{ r.id_categoria_etiqueta }}</td>
                     <td>
-                        <a class="btn btn-danger" href="javascript:eliminar('{% url 'productos_eliminar' r.id %}')">Eliminar</a>
-                        <a class="btn btn-info" href="{% url 'productos_formulario_editar' r.id %}">Editar</a>
+                        <a class="btn btn-danger" href="javascript:eliminar('{% url 'etiquetas_eliminar' r.id %}')">Eliminar</a>
+                        <a class="btn btn-info" href="{% url 'etiquetas_form_editar' r.id %}">Editar</a>
                     </td>
                 </tr>
             {% endfor %}
