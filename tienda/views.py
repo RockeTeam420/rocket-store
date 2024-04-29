@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import IntegrityError, transaction
+from rest_framework import viewsets 
+from .serializers import *
 # Para tomar el from desde el settings
 from django.conf import settings
 from django.core.mail import BadHeaderError, EmailMessage
@@ -12,6 +14,38 @@ from .models import *
 
 # Create your views here.
 
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
+    
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    
+class CategoriaEtiquetaViewSet(viewsets.ModelViewSet):
+    queryset = CategoriaEtiqueta.objects.all()
+    serializer_class = CategoriaEtiquetaSerializer
+
+class SubCategoriaEtiquetaViewSet(viewsets.ModelViewSet):
+    queryset = SubCategoriaEtiqueta.objects.all()
+    serializer_class = SubCategoriaEtiquetaSerializer
+    
+class ProductoSubCategoriaViewSet(viewsets.ModelViewSet):
+    queryset = ProductoSubCategoria.objects.all()
+    serializer_class = ProductoSubCategoriaSerializer
+    
+class VentaViewSet(viewsets.ModelViewSet):
+    queryset = Venta.objects.all()
+    serializer_class = VentaSerializer
+    
+class DetalleVentaViewSet(viewsets.ModelViewSet):
+    queryset = DetalleVenta.objects.all()
+    serializer_class = DetalleVentaSerializer
+    
 def index(request):
 	logueo = request.session.get("logueo", False)
 
@@ -64,6 +98,19 @@ def inicio(request):
 
 	if logueo:
 		categorias = CategoriaEtiqueta.objects.all()
+		count = 0
+		etiquetas = []
+		for categoria in categorias:
+			name = {'nombre': categoria.nombre,
+				   'subEtiquetas': []
+				   }
+			etiquetas.append(name)
+			subcat = SubCategoriaEtiqueta.objects.filter(id_categoria_etiqueta=categoria.id)
+			for subcategoria in subcat:
+				etiquetas[count]['subEtiquetas'].append(subcategoria)
+			count += 1
+
+		print(etiquetas[0]['subEtiquetas'][0].nombre)
 
 		cat = request.GET.get("cat")
 		if cat == None:
@@ -71,8 +118,9 @@ def inicio(request):
 		else:
 			c = CategoriaEtiqueta.objects.get(pk=cat)
 			productos = Producto.objects.filter(categoria=c)
+			
 
-		contexto = {"data": productos, "cat": categorias}
+		contexto = {"data": productos, "cat": categorias, "etq": etiquetas}
 		return render(request, "tienda/inicio/inicio.html", contexto)
 	else:
 		return redirect("index")
