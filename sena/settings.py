@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tienda',
     'django.contrib.humanize',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "kevinriosb@gmail.com"
 EMAIL_HOST_PASSWORD= "zibnquoimwxxmhrz"
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'tienda.utils.custom_exception_handler'
+}
+    

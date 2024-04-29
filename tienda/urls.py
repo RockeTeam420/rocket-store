@@ -1,9 +1,25 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+from rest_framework.documentation import include_docs_urls
+
+
+router = routers.DefaultRouter()
+router.register(r'categoria', views.CategoriaViewSet)
+router.register(r'producto', views.ProductoViewSet)
+router.register(r'usuario', views.UsuarioViewSet)
+router.register(r'categoria-etiqueta', views.CategoriaEtiquetaViewSet)
+router.register(r'subcategoria-etiqueta', views.SubCategoriaEtiquetaViewSet)
+router.register(r'producto-subcategoria', views.ProductoSubCategoriaViewSet)
+router.register(r'venta', views.VentaViewSet)
+router.register(r'detalle-venta', views.DetalleVentaViewSet)
 
 urlpatterns = [
 	path('', views.index, name="index"),
 	path('inicio/', views.inicio, name="inicio"),
+    
+	#API
+    path('api/1.0/', include(router.urls)),
 
 	# Autenticación de usuarios del sistema
 	path('login/', views.login, name="login"),

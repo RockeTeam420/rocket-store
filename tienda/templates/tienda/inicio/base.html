@@ -9,6 +9,8 @@
     <title>Tienda SENA - {% block titulo %}...{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}" />
     <link rel="stylesheet" href="{% static 'tienda/css/bootstrap.min.css' %}" />
+    
+    {% block estilos %}{% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
