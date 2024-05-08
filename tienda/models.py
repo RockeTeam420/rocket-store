@@ -1,6 +1,30 @@
+from django.contrib.auth.models import AbstractUser
+from .authentication import CustomUserManager
+
 from django.db import models
 
 # Create your models here.
+
+class Usuario(AbstractUser):
+	username = None
+	nombre = models.CharField(max_length=254)
+	email = models.EmailField(max_length=254, unique=True)
+	password = models.CharField(max_length=254)
+	ROLES = (
+		(1, "Administrador"),
+		(2, "Despachador"),
+		(3, "Cliente"),
+	)
+	rol = models.IntegerField(choices=ROLES, default=3)
+	foto = models.ImageField(upload_to="fotos/", default="fotos/default.png", blank=True)
+	token_recuperar = models.CharField(max_length=254, default="", blank=True, null=True)
+	USERNAME_FIELD = "email"
+	REQUIRED_FIELDS = ["nombre"]
+	objects = CustomUserManager()
+
+	def __str__(self):
+		return self.nombre
+
 class Categoria(models.Model):
 	nombre = models.CharField(max_length=254)
 	descripcion = models.TextField()
@@ -46,21 +70,6 @@ class ProductoSubCategoria(models.Model):
 	def __str__(self):
 		return self.id_producto
 	
-
-class Usuario(models.Model):
-	nombre = models.CharField(max_length=254)
-	correo = models.EmailField(max_length=254, unique=True)
-	clave = models.CharField(max_length=254)
-	ROLES = (
-		(1, "Administrador"),
-		(2, "Despachador"),
-		(3, "Cliente"),
-	)
-	rol = models.IntegerField(choices=ROLES, default=3)
-	foto = models.ImageField(upload_to="fotos/")
-
-	def __str__(self):
-		return self.nombre
 
 
 class Venta(models.Model):

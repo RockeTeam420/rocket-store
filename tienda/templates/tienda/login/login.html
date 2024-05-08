@@ -11,8 +11,8 @@
         </div>
         <form action="{% url 'login' %}" method="post" class="m-3 text-center">
             {% csrf_token %}
-            <input class="form-control" type="text" name="correo" placeholder="Usuario"><br>
-            <input class="form-control" type="password" name="clave" placeholder="Contraseña"><br>
+            <input class="form-control" type="text" name="email" placeholder="Usuario"><br>
+            <input class="form-control" type="password" name="password" placeholder="Contraseña"><br>
             <button type="submit" class="btn btn-success">Login</button>
         </form>
     </div>

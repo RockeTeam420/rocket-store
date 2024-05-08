@@ -6,38 +6,104 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tienda SENA - {% block titulo %}...{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}" />
+    <title>ROCKET STRORE - {% block titulo %}...{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'tienda/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/iniciarSesion.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/registrarse.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/cambioClave.css' %}" />
+
+
+
     
-    {% block estilos %}{% endblock %}
+
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav style="height:110px;" class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <a href="{% url 'index' %}"> <img src="{% static 'tienda/img/icono.png' %}" alt="Logo" style="width:100px; padding:10px" class="rounded-pill"> </a>
+
         <div class="container-fluid">
-            <a  class="navbar-brand" href="{% url 'inicio' %}"> Rocket Store </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" role="button"
+                            data-bs-toggle="dropdown">Usuario</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item">Registrarse</a>
+                            </li>
 
-                    {% if request.session.logueo.rol == 1 %}
-
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-disabled="true" aria-current="page" href="{% url 'categorias_listar' %}">Categorías</a>
+                            <li>
+                                <a class="dropdown-item" href="#">Editar perfil</a>
+                            </li>
+                        </ul>
                     </li>
-                
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'etiquetas_listar' %}"  >Etiquetas</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'productos_listar' %}">Productos</a>
-                    </li>                
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" role="button"
+                            data-bs-toggle="dropdown">Pedido</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="solicitarPedido.html">Solicitar Pedido</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Devolver Pedido</a></li>
+                            <li><a class="dropdown-item" href="#">Cancelar Pedido</a></li>
+                            <li>
+                                <a class="dropdown-item" href="#">Calificar Pedido Realizado</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Reportar inconformidad sobre un pedido</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" role="button"
+                            data-bs-toggle="dropdown">Devoluciones</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="recopilarInformacion.html">Recopilar Información personal
+                                    del cliente</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Guardar información acerca de los gustos del
+                                    cliente</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Editar información personal del cliente</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Almacenar registro del cliente</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" role="button"
+                            data-bs-toggle="dropdown">Productos</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="verProductos.html">Ver productos</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#">Queja</a></li>
+                            <li><a class="dropdown-item" href="#">A third link</a></li>
+                        </ul>
+                    </li>
                 </ul>
+
+                <div class="d-flex gap-3">
+                    <button style="background-color: #feab01" class="btn" data-bs-toggle="modal" data-bs-target="#iniciarSesion"
+                        type="button">
+                        INICIAR SESION
+                    </button>
+                    
+                    
+                    <button style="background-color: #feab01" class="btn"  data-bs-toggle="modal" data-bs-target="#registrar">
+                        REGISTARSE
+                    </button>
+                </div>
+
                 <ul class="d-flex navbar-nav" style="margin-right:0.4rem;">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -53,6 +119,7 @@
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="javascript:ver_carrito(`{% url 'carrito_ver' %}`);">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -67,9 +134,95 @@
                     </li>
 
                 </ul>
-            </div>
+
+            
         </div>
     </nav>
+
+    <div class="modal fade" id="iniciarSesion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content formInicio" id="">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        INICIAR SESION
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{% url 'login' %}" method="post" class="m-3 text-center">
+                        {% csrf_token %}
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">Correo electronico:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Ingresar correo"
+                                name="correo" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="pwd" class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" id="pwd" placeholder="Ingresar contraseña"
+                                name="clave" />
+                        </div>
+                        <div class="form-check mb-3">
+                            <a href="">¿HAS OLVIDADO LA CONTRASEÑA?</a>
+                        </div>
+                        <button type="submit" class="btn btn-dark">REGISTRARSE</button>
+                        <button type="submit" class="btn btn-danger">INICIAR SESION</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="formRegistrar">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        REGISTRARSE
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <form action="/action_page.php">
+                    <div class="mb-3 mt-3">
+                        <label for="email" class="form-label">Nombre de usuario:</label>
+                        <input type="email" class="form-control" id="email" placeholder="Ingresar nombre de usuario"
+                            name="email" />
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="email" class="form-label">Correo electronico:</label>
+                        <input type="email" class="form-control" id="email" placeholder="Ingresar correo"
+                            name="email" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="pwd" placeholder="Ingresar contraseña"
+                            name="pswd" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">Confirmar contraseña:</label>
+                        <input type="password" class="form-control" id="pwd"
+                            placeholder="Ingresa nuevamente la contraseña" name="pswd" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">Numero de celular:</label>
+                        <input class="form-control" id="pwd" placeholder="Ingresar numero de celular" name="pswd" />
+                    </div>
+
+                    <button type="submit" class="btn btn-danger">CREAR CUENTA</button>
+                </form>
+            </div>
+            </div>
+        </div>
+
+    </div>
+
+   
+     
 
     {% if messages %}
         {% for message in messages %}
@@ -80,25 +233,67 @@
         {% endfor %}
     {% endif %}
 
+
     {% block contenedor %}
         ...
     {% endblock %}
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+
+    <div style="background-color: #000000" class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasRightLabel">
                 <div class="spinner-border text-primary d-block" role="status" id="loader">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+            <h1 style="color:white;"> Carrito</h1>
+
+            <button  type="button" class="btn-close btn btn-warning" data-bs-dismiss="offcanvas" aria-label="Close" > </button>
+
         </div>
-        <div class="offcanvas-body" id="respuesta_carrito">
-        </div>
+
+        <div class="offcanvas-body" id="respuesta_carrito"></div>
     </div>
 
     <script src="{% static 'tienda/js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'tienda/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'tienda/js/libreria.js' %}"></script>
+
+
+    <br>
+
+    <footer>
+        <div class="container">
+            <div class="rowss">
+                <img src="{% static 'tienda/img/icono.png' %}" alt="Avatar Logo" style="width: 100px" class="rounded-pill" />
+                <div>
+                    <h3>AYUDA</h3>
+                    <ul style="list-style: none">
+                        <li><a href="#">ESTADO DEL PEDIDO</a></li>
+                        <li><a href="#">ENVIO Y ENTREGA</a></li>
+                        <li><a href="#">DEVOLUCIONES</a></li>
+                        <li><a href="#">CANCELACION DE PEDIDO</a></li>
+                        <li><a href="#">OPCIONES DE PAGO</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>ACERCA DE ROCKET</h3>
+                    <p>NOTICIAS</p>
+                    <p>TRABAJA CON NOSOTROS</p>
+                </div>
+                <div>
+                    <h3>SIGUENOS EN REDES SOCIALES</h3>
+                    <ul style="list-style: none">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
