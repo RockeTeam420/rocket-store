@@ -7,6 +7,7 @@ from .serializers import *
 # Para tomar el from desde el settings
 from django.conf import settings
 from django.core.mail import BadHeaderError, EmailMessage
+import re
 
 
 # Importamos todos los modelos de la base de datos
@@ -60,6 +61,8 @@ def login(request):
 		user = request.POST.get("correo")
 		passw = request.POST.get("clave")
 		# select * from Usuario where correo = "user" and clave = "passw"
+		if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", user):
+			messages.error(request, f"El correo ingresado no es valido")
 		try:
 			q = Usuario.objects.get(correo=user, clave=passw)
 			# Crear variable de sesión
@@ -144,6 +147,8 @@ def categorias_form(request):
 def categorias_crear(request):
 	if request.method == "POST":
 		nomb = request.POST.get("nombre")
+		if not re.match(r"^[a-zA-Z\s]+$", nomb):
+			messages.error(request, f"El nombre solo puede llevar valores alfabeticos")
 		try:
 			q = CategoriaEtiqueta(
 				nombre=nomb,
@@ -180,6 +185,7 @@ def categorias_actualizar(request):
 		id = request.POST.get("id")
 		nomb = request.POST.get("nombre")
 		desc = request.POST.get("descripcion")
+
 		try:
 			q = CategoriaEtiqueta.objects.get(pk=id)
 			q.nombre = nomb
@@ -213,7 +219,13 @@ def productos_crear(request):
 		precio = request.POST.get("precio")
 		inventario = request.POST.get("inventario")
 		fecha_creacion = request.POST.get("fecha_creacion")
-		categoria = CategoriaEtiqueta.objects.get(pk=request.POST.get("categoria"))
+		categoria = SubCategoriaEtiqueta.objects.get(pk=request.POST.get("categoria"))
+		if not re.match(r"^[a-zA-Z\s]+$", nombre):
+			messages.error(request, f"El nombre solo puede llevar valores alfabeticos")
+		if not re.match(r"^\d", precio):
+			messages.error(request, f"El precio solo puede llevar valores numericos")
+		if not re.match(r"^\d", inventario):
+			messages.error(request, f"El inventario solo puede llevar valores numericos")
 		try:
 			q = Producto(
 				nombre=nombre,
@@ -225,7 +237,7 @@ def productos_crear(request):
 			q.save()
 			messages.success(request, "Guardado correctamente!!")
 		except Exception as e:
-			messages.error(request, f"Error: {e}")
+			messages.error(request, f"Error: No se enviaron datos...")
 		return redirect("productos_listar")
 
 	else:
@@ -258,6 +270,12 @@ def productos_actualizar(request):
 		inventario = request.POST.get("inventario")
 		fecha_creacion = request.POST.get("fecha_creacion")
 		categoria = CategoriaEtiqueta.objects.get(pk=request.POST.get("categoria"))
+		if not re.match(r"^[a-zA-Z\s]+$", nombre):
+			messages.error(request, f"El nombre solo puede llevar valores alfabeticos")
+		if not re.match(r"^\d", precio):
+			messages.error(request, f"El precio solo puede llevar valores numericos")
+		if not re.match(r"^\d", inventario):
+			messages.error(request, f"El inventario solo puede llevar valores numericos")
 		try:
 			q = Producto.objects.get(pk=id)
 			q.nombre = nombre
@@ -268,7 +286,7 @@ def productos_actualizar(request):
 			q.save()
 			messages.success(request, "Producto actualizado correctamente!!")
 		except Exception as e:
-			messages.error(request, f"Error: {e}")
+			messages.error(request, f"Error: No se enviaron datos...")
 	else:
 		messages.warning(request, "Error: No se enviaron datos...")
 
@@ -540,6 +558,8 @@ def etiquetas_crear(request):
 	if request.method == "POST":
 		nomb = request.POST.get("nombre")
 		cat = CategoriaEtiqueta(pk=request.POST.get("categoriaEtiqueta"))
+		if not re.match(r"^[a-zA-Z\s]+$", nomb):
+			messages.error(request, f"El nombre solo puede llevar valores alfabeticos")
 		try:
 			q = SubCategoriaEtiqueta(
 				nombre=nomb,
@@ -548,7 +568,7 @@ def etiquetas_crear(request):
 			q.save()
 			messages.success(request, "Guardado correctamente!!")
 		except Exception as e:
-			messages.error(request, f"Error: {e}")
+			messages.error(request, f"Error: No se enviaron los datos...")
 		return redirect("etiquetas_listar")
 
 	else:
@@ -576,6 +596,8 @@ def etiquetas_actualizar(request):
 		id = request.POST.get("id")
 		nomb = request.POST.get("nombre")
 		cat = CategoriaEtiqueta.objects.get(pk=request.POST.get("categoriaEtiqueta"))
+		if not re.match(r"^[a-zA-Z\s]+$", nomb):
+			messages.error(request, f"El nombre solo puede llevar valores alfabeticos")
 		try:
 			q = SubCategoriaEtiqueta.objects.get(pk=id)
 			q.nombre = nomb

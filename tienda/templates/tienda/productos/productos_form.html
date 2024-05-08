@@ -19,7 +19,6 @@
 
         <label class="form-control">Categoría</label>
         <select class="form-control" name="categoria">
-            <option value="">Seleccione</option>
             {% for c in data %}
                 <option value="{{ c.id }}">{{ c.nombre }}</option>
             {% endfor %}
