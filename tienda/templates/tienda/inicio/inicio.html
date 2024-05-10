@@ -3,41 +3,85 @@
 {% load humanize %}
 {% block titulo %}Inicio{% endblock %}
 {% block estilos %}
-<link   rel="stylesheet"
-        href="{% static 'tienda/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'tienda/css/main.css' %}">
 {% endblock %}
 
 
 {% block contenedor %}
 
-    <div id="main">
-        <div id="filtro">
-            {% csrf_token %}
-            <div id="botones">
-                <a href="{% url 'inicio' %}" type="button" class="btn btn-warning">Ver todos</a> 
-                <a href="{% url 'inicio' %}" type="button" class="btn btn-success">Filtrar</a>
+<div id="main">
+    <div id="filtro">
+        {% csrf_token %}
+        <div id="botones">
+            <a href="{% url 'inicio' %}" type="button" class="btn btn-warning">Ver todos</a>
+            <a href="{% url 'inicio' %}" type="button" class="btn btn-success">Filtrar</a>
 
-            </div>
-            {%  for c in etq %}
-                <a id="categorias" href="{% url 'inicio' %}?cat={{ c.id }}"  >{{ c.nombre }}</a>
-                <div>
-                    {%  for e in c.subEtiquetas %}
-                        <input type="checkbox" id="etiquetas" href="{% url 'inicio' %}?cat={{ c.id }}">{{ e.nombre }}</input><br>
-                    {% endfor %}
-                </div>
+        </div>
+        {% for c in etq %}
+        <a id="categorias" href="{% url 'inicio' %}?cat={{ c.id }}">{{ c.nombre }}</a>
+        <div>
+            {% for e in c.subEtiquetas %}
+            <input type="checkbox" id="etiquetas" href="{% url 'inicio' %}?cat={{ c.id }}">{{ e.nombre }}</input><br>
             {% endfor %}
-
         </div>
-        <div id="productos">
+        {% endfor %}
 
-
-
-        </div>
-        <div id="otros">
-
-
-
-        </div>
+        
     </div>
-    
+
+    <div id="productos">
+
+        {% for p in data %}
+        {% if forloop.first %}
+        <div class="row" style="clear:left;">
+            {% endif %}
+
+            {% if forloop.counter0|divisibleby:4 %}
+        </div>
+        <div class="row" style="clear:left;">
+            {% endif %}
+
+            <div class="card m-2 p-2 align-items-center" style="float:left;width: 18rem;">
+                <img src="{{ p.foto.url }}" class="card-img-top" alt="{{ p.nombre }}" style="width:70%">
+                <div class="card-body">
+                    <h5 class="card-title">{{ p.nombre }}</h5>
+                    <p class="card-text">
+                        ${{ p.precio|floatformat:0|intcomma }}
+                    </p>
+                </div>
+                {% if p.inventario > 0 %}
+                <form>
+                    <input type="hidden" name="id" id="id_{{ p.id }}" value="{{ p.id }}" />
+                    <input type="number" name="cantidad" id="cantidad_{{ p.id }}" min="1" max="{{ p.inventario }}"
+                        value="1" size="3" />
+                    <button type="button" onclick="add_carrito(`{% url 'carrito_add' %}`, {{ p.id }});"
+                        class="btn btn-info">Add Carrito</button>
+                </form>
+                {% endif %}
+                <div class="card-footer">
+                    <small class="text-body-secondary">{{ p.categoria }}</small>
+
+                    {% if p.inventario >= 1 and p.inventario <= 3 %} <br><small class="text-danger">Quedan sólo {{
+                            p.inventario }} unidades...</small>
+                        {% elif p.inventario == 0 %}
+                        <br><small class="text-danger">Producto agotado!!</small>
+                        {% endif %}
+                </div>
+            </div>
+
+            {% if forloop.last %}
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+
+    </div>
+    <div id="otros">
+
+
+
+    </div>
+</div>
+
 {% endblock %}

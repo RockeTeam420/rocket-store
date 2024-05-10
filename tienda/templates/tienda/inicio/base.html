@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'tienda/css/iniciarSesion.css' %}" />
     <link rel="stylesheet" href="{% static 'tienda/css/registrarse.css' %}" />
     <link rel="stylesheet" href="{% static 'tienda/css/cambioClave.css' %}" />
+    <link rel="stylesheet" href="{% static 'tienda/css/main.css' %}">
 
 
 
@@ -84,10 +85,11 @@
                             data-bs-toggle="dropdown">Productos</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="productos.html">Ver productos</a>
+                                <a class="dropdown-item" href="{% url 'productos_listar' %}">Ver productos</a>
                             </li>
                             <li><a class="dropdown-item" href="#">Queja</a></li>
-                            <li><a class="dropdown-item" href="#">A third link</a></li>
+                            <li><a class="dropdown-item" href="{% url 'categorias_listar' %}">Categorias</a></li>
+                            <li><a class="dropdown-item" href="{% url 'etiquetas_listar' %}">Etiquetas</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -220,7 +222,6 @@
         </div>
 
     </div>
-
    
      
 
