@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'tienda',
     'django.contrib.humanize',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,17 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "kevinriosb@gmail.com"
 EMAIL_HOST_PASSWORD= "zibnquoimwxxmhrz"
 
+
+AUTH_USER_MODEL = "tienda.Usuario"
+AUTH_PROFILE_MODULE = "tienda.Usuario"
+
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'tienda.utils.custom_exception_handler'
+    'EXCEPTION_HANDLER': 'tienda.utils.custom_exception_handler',         
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+
+    ]
 }
+
     

@@ -23,9 +23,10 @@ class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
     
-class UsuarioViewSet(viewsets.ModelViewSet):
+""" class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+    """
     
 class CategoriaEtiquetaViewSet(viewsets.ModelViewSet):
     queryset = CategoriaEtiqueta.objects.all()
@@ -54,17 +55,33 @@ def index(request):
 		return render(request, "tienda/login/login.html")
 	else:
 		return redirect("inicio")
+	
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+class CategoriaViewSet(viewsets.ModelViewSet):
+	permission_classes = [IsAuthenticated]
+	queryset = Categoria.objects.all()
+	serializer_class = CategoriaSerializer
+
+
+class UsuarioViewSet(viewsets.ModelViewSet):	
+	authentication_classes = [TokenAuthentication]
+	permission_classes = [IsAuthenticated]
+	queryset = Usuario.objects.all()
+	serializer_class = UsuarioSerializer
+
 
 
 def login(request):
 	if request.method == "POST":
-		user = request.POST.get("correo")
-		passw = request.POST.get("clave")
+		user = request.POST.get("email")
+		passw = request.POST.get("password")
 		# select * from Usuario where correo = "user" and clave = "passw"
 		if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", user):
 			messages.error(request, f"El correo ingresado no es valido")
 		try:
-			q = Usuario.objects.get(correo=user, clave=passw)
+			q = Usuario.objects.get(email=user, password=passw)
 			# Crear variable de sesión
 			request.session["logueo"] = {
 				"id": q.id,
@@ -112,9 +129,6 @@ def inicio(request):
 			for subcategoria in subcat:
 				etiquetas[count]['subEtiquetas'].append(subcategoria)
 			count += 1
-
-		print(etiquetas[0]['subEtiquetas'][0].nombre)
-
 		cat = request.GET.get("cat")
 		if cat == None:
 			productos = Producto.objects.all()

@@ -23,7 +23,7 @@ class ProductoAdmin(admin.ModelAdmin):
 
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
-	list_display = ['id', 'nombre', 'nombre_en_plural', 'correo', 'clave', 'rol', 'foto', 'ver_foto']
+	list_display = ['id', 'nombre', 'nombre_en_plural', 'email', 'password', 'rol', 'foto', 'ver_foto']
 
 	def nombre_en_plural(self, obj):
 		return mark_safe(f"<span style='color:red'>{obj.nombre}'s<span>")
