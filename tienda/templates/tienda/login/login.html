@@ -21,24 +21,7 @@
 <section id="cuadroLogin">
     <div class="cuadroLogin">
         <form action="{% url 'login' %}" method="post" class="m-3 text-center">
-            {% csrf_token %}
-
-            <h2>INICIAR SESION</h2>
-            <div class="mb-3 mt-3">
-                <label for="email" class="form-label">Correo electronico:</label>
-                <input type="email" class="form-control" placeholder="Ingresar correo" name="email">
-            </div>
-            <div class="mb-3">
-                <label for="pwd" class="form-label">Contraseña:</label>
-                <input type="password" class="form-control" placeholder="Ingresar contraseña" name="password">
-            </div>
-            <div class="form-check mb-3">
-                <a href="">¿HAS OLVIDADO LA CONTRASEÑA?</a>
-            </div>
-            <button type="submit" class="btn btn-dark">REGISTRARSE</button>
-            <button type="submit" class="btn btn-danger">INICIAR SESION</button>
-
-
+            
         </form>
     </div>
 </section>

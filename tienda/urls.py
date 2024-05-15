@@ -15,8 +15,8 @@ router.register(r'venta', views.VentaViewSet)
 router.register(r'detalle-venta', views.DetalleVentaViewSet)
 
 urlpatterns = [
-	path('', views.index, name="index"),
-	path('inicio/', views.inicio, name="inicio"),
+	path('index/', views.index, name="index"),
+	path('', views.inicio, name="inicio"),
     
 	#API
     path('api/1.0/', include(router.urls)),
@@ -24,7 +24,10 @@ urlpatterns = [
 	# Autenticación de usuarios del sistema
 	path('login/', views.login, name="login"),
 	path('logout/', views.logout, name="logout"),
-
+	path('registrar_usuario/', views.registrar_usuario, name="registrar_usuario"),
+    path("recuperar_clave/", views.recuperar_clave, name="recuperar_clave"),
+	path("verificar_recuperar/", views.verificar_recuperar, name="verificar_recuperar"),
+	
 
 	# CRUD de Categorías
 	path("categorias_listar/", views.categorias, name="categorias_listar"),

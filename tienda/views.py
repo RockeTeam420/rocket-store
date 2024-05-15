@@ -8,6 +8,7 @@ from .serializers import *
 from django.conf import settings
 from django.core.mail import BadHeaderError, EmailMessage
 import re
+from .crypt import *
 
 
 # Importamos todos los modelos de la base de datos
@@ -71,6 +72,26 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 	queryset = Usuario.objects.all()
 	serializer_class = UsuarioSerializer
 
+def registrar_usuario(request):
+	if request.method == "POST":
+		nombre = request.POST.get("nombre")
+		correo = request.POST.get("correo")
+		clave1 = request.POST.get("clave1")
+		clave2 = request.POST.get("clave2")
+		if clave1 == clave2:
+			q = Usuario(
+				nombre=nombre,
+				email=correo,
+				password=hash_password(clave1)
+			)
+			q.save()
+			messages.success(request, "Usuario registrado correctamente!!")
+			return redirect("index")
+		else:
+			messages.warning(request, "No concuerdan las contraseñas")
+			return redirect("registrar_usuario")
+	else:
+		return render(request, "tienda/login/registro.html")
 
 
 def login(request):
@@ -107,40 +128,109 @@ def logout(request):
 		del request.session["carrito"]
 		del request.session["items"]
 		messages.success(request, "Sesión cerrada correctamente!")
-		return redirect("index")
+		return redirect("inicio")
 	except Exception as e:
 		messages.warning(request, "No se pudo cerrar sesión...")
-		return redirect("inicio")
+		return redirect("")
 
 
 def inicio(request):
 	logueo = request.session.get("logueo", False)
 
-	if logueo:
-		categorias = CategoriaEtiqueta.objects.all()
-		count = 0
-		etiquetas = []
-		for categoria in categorias:
-			name = {'nombre': categoria.nombre,
-				   'subEtiquetas': []
-				   }
-			etiquetas.append(name)
-			subcat = SubCategoriaEtiqueta.objects.filter(id_categoria_etiqueta=categoria.id)
-			for subcategoria in subcat:
-				etiquetas[count]['subEtiquetas'].append(subcategoria)
-			count += 1
-		cat = request.GET.get("cat")
-		if cat == None:
-			productos = Producto.objects.all()
-		else:
-			c = CategoriaEtiqueta.objects.get(pk=cat)
-			productos = Producto.objects.filter(categoria=c)
-			
-
-		contexto = {"data": productos, "cat": categorias, "etq": etiquetas}
-		return render(request, "tienda/inicio/inicio.html", contexto)
+	categorias = CategoriaEtiqueta.objects.all()
+	count = 0
+	etiquetas = []
+	for categoria in categorias:
+		name = {'nombre': categoria.nombre,
+				'subEtiquetas': []
+				}
+		etiquetas.append(name)
+		subcat = SubCategoriaEtiqueta.objects.filter(id_categoria_etiqueta=categoria.id)
+		for subcategoria in subcat:
+			etiquetas[count]['subEtiquetas'].append(subcategoria)
+		count += 1
+	cat = request.GET.get("cat")
+	if cat == None:
+		productos = Producto.objects.all()
 	else:
-		return redirect("index")
+		c = CategoriaEtiqueta.objects.get(pk=cat)
+		productos = Producto.objects.filter(categoria=c)
+		
+
+	contexto = {"data": productos, "cat": categorias, "etq": etiquetas}
+	return render(request, "tienda/inicio/inicio.html", contexto)
+	
+def recuperar_clave(request):
+	if request.method == "POST":
+		email = request.POST.get("correo")
+		try:
+			q = Usuario.objects.get(email=email)
+			from random import randint
+			import base64
+			token = base64.b64encode(str(randint(100000, 999999)).encode("ascii")).decode("ascii")
+			print(token)
+			q.token_recuperar = token
+			q.save()
+			# enviar correo de recuperación
+			destinatario = email
+			mensaje = f"""
+					<h1 style='color:blue;'>Tienda virtual</h1>
+					<p>Usted ha solicitado recuperar su contraseña, haga clic en el link y digite el token.</p>
+					<p>Token: <strong>{token}</strong></p>
+					<a href='http://127.0.0.1:8000/tienda/verificar_recuperar/?correo={email}'>Recuperar...</a>
+					"""
+			try:
+				msg = EmailMessage("Tienda ADSO", mensaje, settings.EMAIL_HOST_USER, [destinatario])
+				msg.content_subtype = "html"  # Habilitar contenido html
+				msg.send()
+				messages.success(request, "Correo enviado!!")
+			except BadHeaderError:
+				messages.error(request, "Encabezado no válido")
+			except Exception as e:
+				messages.error(request, f"Error: {e}")
+			# fin -
+		except Usuario.DoesNotExist:
+			messages.error(request, "No existe el usuario....")
+		return redirect("recuperar_clave")
+	else:
+		return render(request, "tienda/login/recuperar.html")
+
+
+def verificar_recuperar(request):
+	if request.method == "POST":
+		if request.POST.get("check"):
+			# caso en el que el token es correcto
+			email = request.POST.get("correo")
+			q = Usuario.objects.get(email=email)
+
+			c1 = request.POST.get("nueva1")
+			c2 = request.POST.get("nueva2")
+
+			if c1 == c2:
+				# cambiar clave en DB
+				q.password = hash_password(c1)
+				q.token_recuperar = ""
+				q.save()
+				messages.success(request, "Contraseña guardada correctamente!!")
+				return redirect("index")
+			else:
+				messages.info(request, "Las contraseñas nuevas no coinciden...")
+				return redirect("verificar_recuperar")+"/?correo="+email
+		else:
+			# caso en el que se hace clic en el correo-e para digitar token
+			email = request.POST.get("correo")
+			token = request.POST.get("token")
+			q = Usuario.objects.get(email=email)
+			if (q.token_recuperar == token) and q.token_recuperar != "":
+				contexto = {"check": "ok", "correo":email}
+				return render(request, "tienda/login/verificar_recuperar.html", contexto)
+			else:
+				messages.error(request, "Token incorrecto")
+				return redirect("verificar_recuperar")	# falta agregar correo como parametro url
+	else:
+		correo = request.GET.get("correo")
+		contexto = {"correo":correo}
+		return render(request, "tienda/login/verificar_recuperar.html", contexto)
 
 
 from .decorador_especial import *

@@ -93,7 +93,8 @@
                         </ul>
                     </li>
                 </ul>
-
+                {% if not request.session.logueo %}
+                
                 <div class="d-flex gap-3">
                     <button style="background-color: #feab01" class="btn" data-bs-toggle="modal" data-bs-target="#iniciarSesion"
                         type="button">
@@ -105,7 +106,10 @@
                         REGISTARSE
                     </button>
                 </div>
+                {% endif %}
+                
 
+                {% if request.session.logueo %}
                 <ul class="d-flex navbar-nav" style="margin-right:0.4rem;">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -121,7 +125,6 @@
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
                         </ul>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="javascript:ver_carrito(`{% url 'carrito_ver' %}`);">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -134,8 +137,8 @@
                             </span>
                         </a>
                     </li>
-
                 </ul>
+                {% endif %}
 
             
         </div>
@@ -157,15 +160,15 @@
                         <div class="mb-3 mt-3">
                             <label for="email" class="form-label">Correo electronico:</label>
                             <input type="email" class="form-control" id="email" placeholder="Ingresar correo"
-                                name="correo" />
+                                name="email" />
                         </div>
                         <div class="mb-3">
                             <label for="pwd" class="form-label">Contraseña:</label>
                             <input type="password" class="form-control" id="pwd" placeholder="Ingresar contraseña"
-                                name="clave" />
+                                name="password" />
                         </div>
                         <div class="form-check mb-3">
-                            <a href="">¿HAS OLVIDADO LA CONTRASEÑA?</a>
+                            <a href="{% url 'recuperar_clave' %}">¿HAS OLVIDADO LA CONTRASEÑA?</a>
                         </div>
                         <button type="submit" class="btn btn-dark">REGISTRARSE</button>
                         <button type="submit" class="btn btn-danger">INICIAR SESION</button>
