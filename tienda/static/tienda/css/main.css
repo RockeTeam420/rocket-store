@@ -1,0 +1,46 @@
+#main{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid blueviolet ;
+    height: 100%;
+    width: 100%;
+    padding: 0.5%;
+}
+#filtro{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid green ;
+    height: 100%;
+    width: 20%;
+    padding: 1% 5% 1% 5%;
+    background-color: gainsboro;
+}
+
+#botones{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#categorias{
+    color: #feab01;
+}
+
+#etiquetas{
+    color: black;
+}
+
+#productos{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid blue ;
+    height: 100%;
+    width: 60%;
+}
+#otros{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid red ;
+    height: 100%;
+    width: 20%;
+}

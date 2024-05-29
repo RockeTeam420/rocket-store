@@ -1,0 +1,46 @@
+{% load humanize %}
+
+<h1>Carrito ({{ items }})</h1>
+
+{% if request.session.carrito %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in request.session.carrito %}
+            <tr>
+                <td>
+                    <img src="{{ p.foto }}" width="35%"/><br>
+                    {{ p.producto }} <br>Precio: (${{ p.precio|floatformat:0|intcomma }})
+                </td>
+                <td>
+                    <input type="hidden" name="id" id="id_{{ p.id }}" value="{{ p.id }}" />
+                    <input oninput="actualizar_totales_carrito(`{% url 'actualizar_totales_carrito' p.id %}`, {{ p.id }});" 
+                    type="number" name="cantidad" id="cantidad_carrito_{{ p.id }}" min="1" max="{{ p.inventario }}" value="{{ p.cantidad }}" size="3"  />
+                </td>
+
+                <td class="text-end">${{ p.subtotal|floatformat:0|intcomma }}</td>
+                <td>
+                    <a class="btn btn-danger" href="javascript:eliminar_item_carrito(`{% url 'eliminar_item_carrito' p.id %}`);">X</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2"><strong>TOTAL</strong></td>
+                <td class="text-end"><strong>${{ total|floatformat:0|intcomma }}</strong></td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="{% url 'realizar_venta' %}">Pagar</a>
+    <a class="btn btn-warning" href="{% url 'vaciar_carrito' %}">Vaciar Carrito</a>
+{% else %}
+    <p>No hay productos en el carrito</p>
+{% endif %}
